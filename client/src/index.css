@@ -5,25 +5,69 @@
 @tailwind utilities;
 
 @layer base {
+  :root {
+    color-scheme: dark;
+  }
+  
   body {
-    @apply font-sans bg-background text-secondary antialiased;
+    @apply font-sans bg-background text-textPrimary antialiased min-h-screen relative;
+    background-color: #09090b;
+  }
+
+  /* Grid background pattern as a pseudo-element behind everything */
+  body::before {
+    content: '';
+    @apply fixed inset-0 pointer-events-none;
+    background-image: url('data:image/svg+xml,%3Csvg width="40" height="40" viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg"%3E%3Cpath d="M0 0H40V40H0V0Z" fill="transparent"/%3E%3Cpath d="M0 0H40" stroke="rgba(255,255,255,0.03)" stroke-width="1"/%3E%3Cpath d="M0 0V40" stroke="rgba(255,255,255,0.03)" stroke-width="1"/%3E%3C/svg%3E');
+    background-size: 40px 40px;
+    z-index: -2;
+  }
+
+  /* Radial gradient for professional lighting effect */
+  body::after {
+    content: '';
+    @apply fixed inset-0 pointer-events-none;
+    background: radial-gradient(circle at 50% -10%, rgba(59, 130, 246, 0.15), transparent 60%),
+                radial-gradient(circle at -20% 80%, rgba(139, 92, 246, 0.1), transparent 50%);
+    z-index: -1;
+  }
+
+  /* Scrollbar custom styling */
+  ::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;
+  }
+  ::-webkit-scrollbar-track {
+    background: transparent;
+  }
+  ::-webkit-scrollbar-thumb {
+    @apply bg-border rounded-full hover:bg-textSecondary/50 border-2 border-transparent bg-clip-padding transition-colors;
   }
 }
 
 @layer components {
   .btn {
-    @apply px-4 py-2 rounded-lg font-medium transition-all duration-200 ease-in-out shadow-sm transform hover:scale-105;
+    @apply inline-flex items-center justify-center px-4 py-2 text-sm font-medium rounded-lg transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary disabled:pointer-events-none disabled:opacity-50;
   }
+
   .btn-primary {
-    @apply bg-primary text-white hover:bg-blue-700 shadow-md;
+    @apply bg-primary text-white hover:bg-primary-hover shadow-[0_0_15px_rgba(59,130,246,0.3)] hover:shadow-[0_0_20px_rgba(59,130,246,0.5)];
   }
+
   .btn-accent {
-    @apply bg-accent text-white hover:bg-yellow-600;
+    @apply bg-surface hover:bg-surfaceHover text-textPrimary border border-border shadow-sm hover:shadow-md transition-all;
   }
+
+  /* Glassmorphic/Professional Card with very low opacity border */
   .card {
-    @apply bg-surface rounded-xl shadow-lg border border-gray-100 p-6 hover:shadow-xl transition-shadow duration-300;
+    @apply bg-surface/60 backdrop-blur-xl border border-white/5 rounded-2xl shadow-lg p-6 hover:shadow-[0_8px_30px_rgb(0,0,0,0.12)] hover:bg-surface/80 hover:border-white/10 transition-all duration-300;
   }
+
   .input {
-    @apply w-full px-4 py-2 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent transition-all;
+    @apply w-full px-4 py-2.5 bg-surface/50 border border-white/10 rounded-lg text-textPrimary placeholder:text-textSecondary/50 focus:outline-none focus:ring-2 focus:ring-primary/50 focus:border-primary/50 transition-all shadow-inner;
+  }
+
+  .container-glass {
+    @apply rounded-2xl border border-white/5 bg-surface/40 backdrop-blur-3xl shadow-2xl overflow-hidden;
   }
 }

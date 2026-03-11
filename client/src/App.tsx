@@ -17,7 +17,7 @@ const ProtectedLayout = () => {
   if (!user) return <Navigate to="/login" replace />;
 
   return (
-    <div className="min-h-screen bg-background">
+    <div className="min-h-screen bg-transparent">
       <Navbar />
       <main>
         <Outlet />
@@ -55,13 +55,12 @@ const App: React.FC = () => {
             <Route path="/" element={<Navigate to="/dashboard" replace />} />
 
             <Route element={<RoleRoute allowedRoles={['DOCTOR', 'ADMIN']} />}>
-              <Route path="/patients/:id" element={<PatientDetails />} />
               <Route path="/patients/:id/new-decision" element={<NewDecision />} />
-              <Route path="/decisions/:id" element={<DecisionPage />} />
             </Route>
 
             <Route element={<RoleRoute allowedRoles={['RECEPTIONIST', 'DOCTOR', 'ADMIN']} />}>
-              {/* Shared routes if any */}
+              <Route path="/patients/:id" element={<PatientDetails />} />
+              <Route path="/decisions/:id" element={<DecisionPage />} />
             </Route>
           </Route>
         </Routes>

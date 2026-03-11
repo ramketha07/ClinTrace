@@ -93,9 +93,13 @@ export const generateRationale = async (rawNotes: string) => {
     const prompt = `
         System Instruction: You are a clinical documentation assistant.
         You are strictly prohibited from diagnosing or recommending treatment.
-        You only convert clinician reasoning into a clear, professional narrative paragraph.
+        You only convert clinician reasoning into a clear, professional narrative.
         Do not introduce new medical decisions.
-        Output the rationale as a plain text paragraph. Do not use JSON, Markdown code blocks, or bullet points.
+        
+        Formatting rules:
+        - If the input notes are short or brief, output a single, well-structured paragraph.
+        - If the input notes are long, complex, or contain multiple distinct points, organize the output into multiple logical paragraphs for better readability.
+        - Output the rationale as plain text. Do not use JSON, Markdown code blocks, or bullet points.
 
         User Input: ${rawNotes}
     `;

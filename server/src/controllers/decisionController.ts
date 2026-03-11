@@ -1,11 +1,20 @@
 import { Request, Response } from 'express';
 import Decision from '../models/Decision';
 import AuditLog from '../models/AuditLog';
+import Patient from '../models/Patient';
 import { generateRationale } from '../services/aiService';
 
 export const createDecision = async (req: Request, res: Response) => {
     try {
         const { patient, contextSnapshot, optionsConsidered, constraints, rawNotes } = req.body;
+        
+        if (req.user!.role === 'DOCTOR') {
+            const patientDoc = await Patient.findById(patient);
+            if (!patientDoc || (patientDoc.assignedDoctor as any).toString() !== req.user!._id.toString()) {
+                return res.status(403).json({ message: 'Not authorized to create decision for this patient' });
+            }
+        }
+
         const decision = await Decision.create({
             patient,
             doctor: req.user!._id,
@@ -82,6 +91,13 @@ export const approveDecision = async (req: Request, res: Response) => {
 
 export const getDecisionsByPatient = async (req: Request, res: Response) => {
     try {
+        if (req.user!.role === 'DOCTOR') {
+            const patientDoc = await Patient.findById(req.params.patientId);
+            if (!patientDoc || (patientDoc.assignedDoctor as any).toString() !== req.user!._id.toString()) {
+                return res.status(403).json({ message: 'Not authorized to view decisions for this patient' });
+            }
+        }
+    
         const decisions = await Decision.find({ patient: req.params.patientId }).sort({ createdAt: -1 });
         res.json(decisions);
     } catch (error) {
@@ -95,10 +111,40 @@ export const getDecisionById = async (req: Request, res: Response) => {
         if (!decision) {
             return res.status(404).json({ message: 'Decision not found' });
         }
-        // Check if user is authorized to view this decision (e.g. assigned doctor or admin)
-        // For simplicity, allowed if role is sufficient
+        
+        if (req.user!.role === 'DOCTOR') {
+            const patientDoc = await Patient.findById(decision.patient);
+            if (!patientDoc || (patientDoc.assignedDoctor as any).toString() !== req.user!._id.toString()) {
+                return res.status(403).json({ message: 'Not authorized to view this decision' });
+            }
+        }
+        
         res.json(decision);
     } catch (error) {
         res.status(500).json({ message: 'Error fetching decision', error });
+    }
+};
+
+export const deleteDecision = async (req: Request, res: Response) => {
+    try {
+        const decision = await Decision.findById(req.params.id);
+        if (!decision) {
+            return res.status(404).json({ message: 'Decision not found' });
+        }
+
+        if (decision.immutable) {
+            return res.status(400).json({ message: 'Approved decisions cannot be deleted' });
+        }
+
+        await Decision.findByIdAndDelete(req.params.id);
+
+        await AuditLog.create({
+            user: req.user!._id,
+            action: `Deleted draft decision ${decision._id}`,
+        });
+
+        res.json({ message: 'Decision deleted successfully' });
+    } catch (error) {
+        res.status(500).json({ message: 'Error deleting decision', error });
     }
 };

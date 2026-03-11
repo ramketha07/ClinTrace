@@ -31,30 +31,30 @@ const PatientList: React.FC = () => {
     }, []);
 
     return (
-        <div className="bg-white shadow overflow-hidden sm:rounded-md">
-            <ul className="divide-y divide-gray-200">
+        <div className="card shadow-lg overflow-hidden sm:rounded-md">
+            <ul className="divide-y divide-white/10">
                 {patients.map((patient) => (
                     <li key={patient._id}>
-                        <Link to={`/patients/${patient._id}`} className="block hover:bg-gray-50 transition duration-150 ease-in-out">
+                        <Link to={`/patients/${patient._id}`} className="block hover:bg-transparent transition duration-150 ease-in-out">
                             <div className="px-4 py-4 sm:px-6">
                                 <div className="flex items-center justify-between">
                                     <div className="text-sm font-medium text-primary truncate">
-                                        {patient.name} <span className="text-gray-500 text-xs ml-2">({patient.patientId})</span>
+                                        {patient.name} <span className="text-textSecondary text-opacity-70 text-xs ml-2">({patient.patientId})</span>
                                     </div>
                                     <div className="ml-2 flex-shrink-0 flex">
-                                        <span className="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-green-100 text-green-800">
+                                        <span className="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-green-500/20 text-green-300">
                                             Active
                                         </span>
                                     </div>
                                 </div>
                                 <div className="mt-2 sm:flex sm:justify-between">
                                     <div className="sm:flex">
-                                        <p className="flex items-center text-sm text-gray-500">
-                                            <User className="flex-shrink-0 mr-1.5 h-5 w-5 text-gray-400" />
+                                        <p className="flex items-center text-sm text-textSecondary text-opacity-70">
+                                            <User className="flex-shrink-0 mr-1.5 h-5 w-5 text-textSecondary text-opacity-70" />
                                             {patient.gender}, {patient.age} years
                                         </p>
-                                        <p className="mt-2 flex items-center text-sm text-gray-500 sm:mt-0 sm:ml-6">
-                                            <ClipboardList className="flex-shrink-0 mr-1.5 h-5 w-5 text-gray-400" />
+                                        <p className="mt-2 flex items-center text-sm text-textSecondary text-opacity-70 sm:mt-0 sm:ml-6">
+                                            <ClipboardList className="flex-shrink-0 mr-1.5 h-5 w-5 text-textSecondary text-opacity-70" />
                                             Dr. {patient.assignedDoctor?.name || 'Unassigned'}
                                         </p>
                                     </div>

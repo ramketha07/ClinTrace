@@ -42,23 +42,23 @@ const ReceptionistDashboard: React.FC = () => {
 
     return (
         <div className="max-w-7xl mx-auto py-6 sm:px-6 lg:px-8">
-            <h1 className="text-3xl font-bold text-gray-900 mb-6">Receptionist Dashboard</h1>
+            <h1 className="text-3xl font-bold text-textPrimary mb-6">Receptionist Dashboard</h1>
 
-            <div className="bg-white shadow sm:rounded-lg p-6 mb-8">
-                <h2 className="text-lg leading-6 font-medium text-gray-900 mb-4 flex items-center">
+            <div className="card shadow-lg sm:rounded-lg p-6 mb-8">
+                <h2 className="text-lg leading-6 font-medium text-textPrimary mb-4 flex items-center">
                     <UserPlus className="mr-2" /> Add New Patient
                 </h2>
                 <form onSubmit={handleSubmit} className="grid grid-cols-1 gap-y-6 sm:grid-cols-2 sm:gap-x-8">
                     <div>
-                        <label className="block text-sm font-medium text-gray-700">Name</label>
+                        <label className="block text-sm font-medium text-textSecondary text-opacity-90">Name</label>
                         <input type="text" value={name} onChange={e => setName(e.target.value)} className="mt-1 input block w-full" required />
                     </div>
                     <div>
-                        <label className="block text-sm font-medium text-gray-700">Age</label>
+                        <label className="block text-sm font-medium text-textSecondary text-opacity-90">Age</label>
                         <input type="number" value={age} onChange={e => setAge(e.target.value)} className="mt-1 input block w-full" required />
                     </div>
                     <div>
-                        <label className="block text-sm font-medium text-gray-700">Gender</label>
+                        <label className="block text-sm font-medium text-textSecondary text-opacity-90">Gender</label>
                         <select value={gender} onChange={e => setGender(e.target.value)} className="mt-1 input block w-full" required>
                             <option value="">Select Gender</option>
                             <option value="Male">Male</option>
@@ -67,11 +67,11 @@ const ReceptionistDashboard: React.FC = () => {
                         </select>
                     </div>
                     <div>
-                        <label className="block text-sm font-medium text-gray-700">Phone Number</label>
+                        <label className="block text-sm font-medium text-textSecondary text-opacity-90">Phone Number</label>
                         <input type="tel" value={phone} onChange={e => setPhone(e.target.value)} className="mt-1 input block w-full" placeholder="+1234567890" required />
                     </div>
                     <div>
-                        <label className="block text-sm font-medium text-gray-700">Assigned Doctor</label>
+                        <label className="block text-sm font-medium text-textSecondary text-opacity-90">Assigned Doctor</label>
                         <select value={doctorId} onChange={e => setDoctorId(e.target.value)} className="mt-1 input block w-full" required>
                             <option value="">Select Doctor</option>
                             {doctors.map(doctor => (
@@ -87,7 +87,7 @@ const ReceptionistDashboard: React.FC = () => {
                 </form>
             </div>
 
-            <h2 className="text-2xl font-bold text-gray-900 mb-4">Patient List</h2>
+            <h2 className="text-2xl font-bold text-textPrimary mb-4">Patient List</h2>
             <PatientList />
         </div>
     );

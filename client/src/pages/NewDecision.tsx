@@ -29,10 +29,10 @@ const NewDecision: React.FC = () => {
 
     return (
         <div className="max-w-3xl mx-auto py-6 sm:px-6 lg:px-8">
-            <h1 className="text-2xl font-bold text-gray-900 mb-6">New Clinical Decision</h1>
-            <form onSubmit={handleSubmit} className="bg-white shadow sm:rounded-lg p-6 space-y-6">
+            <h1 className="text-2xl font-bold text-textPrimary mb-6">New Clinical Decision</h1>
+            <form onSubmit={handleSubmit} className="card shadow-lg sm:rounded-lg p-6 space-y-6">
                 <div>
-                    <label className="block text-sm font-medium text-gray-700">Patient Symptoms / Context</label>
+                    <label className="block text-sm font-medium text-textSecondary text-opacity-90">Patient Symptoms / Context</label>
                     <textarea
                         className="mt-1 input block w-full h-24"
                         value={symptoms}
@@ -42,8 +42,8 @@ const NewDecision: React.FC = () => {
                 </div>
 
                 <div>
-                    <label className="block text-sm font-medium text-gray-700">Clinical Reasoning (Raw Notes)</label>
-                    <p className="text-xs text-gray-500 mb-2">Detailed notes on your thought process.</p>
+                    <label className="block text-sm font-medium text-textSecondary text-opacity-90">Clinical Reasoning (Raw Notes)</label>
+                    <p className="text-xs text-textSecondary text-opacity-70 mb-2">Detailed notes on your thought process.</p>
                     <textarea
                         className="mt-1 input block w-full h-48"
                         value={rawNotes}
@@ -59,9 +59,9 @@ const NewDecision: React.FC = () => {
                         type="checkbox"
                         checked={emergency}
                         onChange={e => setEmergency(e.target.checked)}
-                        className="h-4 w-4 text-primary focus:ring-primary border-gray-300 rounded"
+                        className="h-4 w-4 text-primary focus:ring-primary border-white/10 rounded"
                     />
-                    <label htmlFor="emergency" className="ml-2 block text-sm text-gray-900">
+                    <label htmlFor="emergency" className="ml-2 block text-sm text-textPrimary">
                         Emergency Situation
                     </label>
                 </div>

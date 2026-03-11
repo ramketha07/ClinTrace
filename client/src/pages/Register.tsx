@@ -25,44 +25,44 @@ const Register: React.FC = () => {
     };
 
     return (
-        <div className="min-h-screen bg-gray-50 flex flex-col justify-center py-12 sm:px-6 lg:px-8">
+        <div className="min-h-screen bg-transparent flex flex-col justify-center py-12 sm:px-6 lg:px-8">
             <div className="sm:mx-auto sm:w-full sm:max-w-md">
                 <div className="flex justify-center text-primary mb-4">
                     <Stethoscope size={48} />
                 </div>
-                <h2 className="mt-6 text-center text-3xl font-extrabold text-gray-900">
+                <h2 className="mt-6 text-center text-3xl font-extrabold text-textPrimary">
                     Create an account
                 </h2>
-                <p className="mt-2 text-center text-sm text-gray-600">
+                <p className="mt-2 text-center text-sm text-textSecondary">
                     Or <Link to="/login" className="font-medium text-primary hover:text-indigo-500">sign in to your existing account</Link>
                 </p>
             </div>
 
             <div className="mt-8 sm:mx-auto sm:w-full sm:max-w-md">
-                <div className="bg-white py-8 px-4 shadow sm:rounded-lg sm:px-10 border border-gray-100">
+                <div className="card py-8 px-4 shadow-lg sm:rounded-lg sm:px-10 border border-white/5">
                     <form className="space-y-6" onSubmit={handleSubmit}>
                         <div>
-                            <label htmlFor="name" className="block text-sm font-medium text-gray-700">Full Name</label>
-                            <div className="mt-1 relative rounded-md shadow-sm">
+                            <label htmlFor="name" className="block text-sm font-medium text-textSecondary text-opacity-90">Full Name</label>
+                            <div className="mt-1 relative rounded-md shadow-lg">
                                 <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                                    <User className="h-5 w-5 text-gray-400" />
+                                    <User className="h-5 w-5 text-textSecondary text-opacity-70" />
                                 </div>
                                 <input id="name" type="text" required value={name} onChange={(e) => setName(e.target.value)} className="input pl-10" placeholder="John Doe" />
                             </div>
                         </div>
 
                         <div>
-                            <label htmlFor="email" className="block text-sm font-medium text-gray-700">Email address</label>
-                            <div className="mt-1 relative rounded-md shadow-sm">
+                            <label htmlFor="email" className="block text-sm font-medium text-textSecondary text-opacity-90">Email address</label>
+                            <div className="mt-1 relative rounded-md shadow-lg">
                                 <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                                    <Mail className="h-5 w-5 text-gray-400" />
+                                    <Mail className="h-5 w-5 text-textSecondary text-opacity-70" />
                                 </div>
                                 <input id="email" type="email" required value={email} onChange={(e) => setEmail(e.target.value)} className="input pl-10" placeholder="doctor@example.com" />
                             </div>
                         </div>
 
                         <div>
-                            <label htmlFor="role" className="block text-sm font-medium text-gray-700">Role</label>
+                            <label htmlFor="role" className="block text-sm font-medium text-textSecondary text-opacity-90">Role</label>
                             <select id="role" value={role} onChange={(e) => setRole(e.target.value)} className="mt-1 input">
                                 <option value="DOCTOR">Doctor</option>
                                 <option value="RECEPTIONIST">Receptionist</option>
@@ -71,10 +71,10 @@ const Register: React.FC = () => {
                         </div>
 
                         <div>
-                            <label htmlFor="password" className="block text-sm font-medium text-gray-700">Password</label>
-                            <div className="mt-1 relative rounded-md shadow-sm">
+                            <label htmlFor="password" className="block text-sm font-medium text-textSecondary text-opacity-90">Password</label>
+                            <div className="mt-1 relative rounded-md shadow-lg">
                                 <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                                    <Lock className="h-5 w-5 text-gray-400" />
+                                    <Lock className="h-5 w-5 text-textSecondary text-opacity-70" />
                                 </div>
                                 <input id="password" type="password" required value={password} onChange={(e) => setPassword(e.target.value)} className="input pl-10" placeholder="••••••••" />
                             </div>
