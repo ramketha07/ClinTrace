@@ -15,13 +15,16 @@ export const createDecision = async (req: Request, res: Response) => {
             }
         }
 
+        const timestamp = new Date().toLocaleString("en-US", { dateStyle: 'medium', timeStyle: 'medium' });
+        const appendedNotes = `${rawNotes}\n\n--- Saved by Dr. ${req.user!.name} on ${timestamp} ---`;
+
         const decision = await Decision.create({
             patient,
             doctor: req.user!._id,
             contextSnapshot,
             optionsConsidered,
             constraints,
-            rawNotes,
+            rawNotes: appendedNotes,
         });
 
         await AuditLog.create({
@@ -73,7 +76,10 @@ export const approveDecision = async (req: Request, res: Response) => {
             return res.status(400).json({ message: 'Decision already approved and immutable' });
         }
 
-        decision.approvedRationale = decision.aiGeneratedRationale;
+        const timestamp = new Date().toLocaleString("en-US", { dateStyle: 'medium', timeStyle: 'medium' });
+        const appendedRationale = `${decision.aiGeneratedRationale}\n\n--- Approved by Dr. ${req.user!.name} on ${timestamp} ---`;
+
+        decision.approvedRationale = appendedRationale;
         decision.immutable = true;
         decision.versionNumber += 1;
         await decision.save();
@@ -98,7 +104,9 @@ export const getDecisionsByPatient = async (req: Request, res: Response) => {
             }
         }
     
-        const decisions = await Decision.find({ patient: req.params.patientId }).sort({ createdAt: -1 });
+        const decisions = await Decision.find({ patient: req.params.patientId })
+            .populate('doctor', 'name')
+            .sort({ createdAt: -1 });
         res.json(decisions);
     } catch (error) {
         res.status(500).json({ message: 'Error fetching decisions', error });
@@ -107,7 +115,7 @@ export const getDecisionsByPatient = async (req: Request, res: Response) => {
 
 export const getDecisionById = async (req: Request, res: Response) => {
     try {
-        const decision = await Decision.findById(req.params.id);
+        const decision = await Decision.findById(req.params.id).populate('doctor', 'name');
         if (!decision) {
             return res.status(404).json({ message: 'Decision not found' });
         }

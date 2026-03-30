@@ -153,7 +153,7 @@ const PatientDetails: React.FC = () => {
                         >
                             <div className="flex items-center justify-between">
                                 <p className="text-sm font-medium text-primary flex items-center pr-16">
-                                    <FileText className="mr-2" size={16} /> Decision from {new Date(decision.createdAt).toLocaleDateString()}
+                                    <FileText className="mr-2" size={16} /> Record by Dr. {decision.doctor?.name || 'Unknown'} on {new Date(decision.createdAt).toLocaleDateString()} at {new Date(decision.createdAt).toLocaleTimeString()}
                                 </p>
                                 <div className="ml-2 flex-shrink-0 flex items-center space-x-2">
                                     <span className={`px-2 inline-flex text-xs leading-5 font-semibold rounded-full ${decision.immutable ? 'bg-green-500/20 text-green-300' : 'bg-yellow-500/20 text-yellow-300'}`}>

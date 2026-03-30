@@ -54,7 +54,7 @@ const DecisionPage: React.FC = () => {
                     <div>
                         <h3 className="text-lg leading-6 font-medium text-textPrimary">Decision details</h3>
                         <p className="mt-1 max-w-2xl text-sm text-textSecondary text-opacity-70">
-                            Version: {decision.versionNumber} | ID: {decision._id}
+                            Version: {decision.versionNumber} | ID: {decision._id} | Doctor: Dr. {decision.doctor?.name || 'Unknown'} | Saved on: {new Date(decision.createdAt).toLocaleDateString()} {new Date(decision.createdAt).toLocaleTimeString()}
                         </p>
                     </div>
                     {decision.immutable && (
