@@ -89,7 +89,24 @@ const getModel = async () => {
     }
 };
 
-export const generateRationale = async (rawNotes: string) => {
+export const generateRationale = async (decisionData: { 
+    symptoms: string; 
+    decisionOptions: { action: string; reasoning: string }[]; 
+    constraints: any; 
+    rawNotes: string; 
+}) => {
+    const { symptoms, decisionOptions, constraints, rawNotes } = decisionData;
+    
+    // Format constraints for prompt
+    const activeConstraints = Object.entries(constraints)
+        .filter(([key, value]) => value === true && key !== 'other')
+        .map(([key]) => key.replace(/([A-Z])/g, ' $1').toLowerCase());
+    
+    if (constraints.other) activeConstraints.push(constraints.other);
+    
+    const optionsText = decisionOptions.map((opt, i) => `Option ${i+1}: ${opt.action} (Reason: ${opt.reasoning})`).join('\n');
+    const constraintsText = activeConstraints.length > 0 ? activeConstraints.join(', ') : 'None';
+
     const prompt = `
         System Instruction: You are a clinical documentation assistant.
         You are strictly prohibited from diagnosing or recommending treatment.
@@ -97,11 +114,18 @@ export const generateRationale = async (rawNotes: string) => {
         Do not introduce new medical decisions.
         
         Formatting rules:
-        - If the input notes are short or brief, output a single, well-structured paragraph.
-        - If the input notes are long, complex, or contain multiple distinct points, organize the output into multiple logical paragraphs for better readability.
+        - If the input is short or brief, output a single, well-structured paragraph.
+        - If the input is long, complex, or contain multiple distinct points, organize the output into multiple logical paragraphs for better readability.
         - Output the rationale as plain text. Do not use JSON, Markdown code blocks, or bullet points.
 
-        User Input: ${rawNotes}
+        Decision Context:
+        - Patient Symptoms/Context: ${symptoms}
+        - Alternatives Considered: 
+          ${optionsText || 'None recorded'}
+        - Constraints/Influencing Factors: ${constraintsText}
+        - Clinical Reasoning (Raw Notes): ${rawNotes}
+
+        Please synthesize this information into a professional clinical rationale.
     `;
 
     try {

@@ -9,11 +9,17 @@ export interface IDecision extends Document {
         testResults: Map<string, any>;
         missingData: string;
     };
-    optionsConsidered: string[];
+    decisionOptions: {
+        action: string;
+        reasoning: string;
+    }[];
     constraints: {
-        emergency: boolean;
-        resourceLimitations: string;
-        financialConstraints: string;
+        emergencyCondition: boolean;
+        financialLimitation: boolean;
+        limitedResources: boolean;
+        patientPreference: boolean;
+        timeConstraint: boolean;
+        investigationDelay: boolean;
         other: string;
     };
     rawNotes: string;
@@ -33,11 +39,17 @@ const DecisionSchema: Schema = new Schema({
         testResults: { type: Map, of: String, default: {} },
         missingData: { type: String, default: '' }
     },
-    optionsConsidered: [{ type: String }],
+    decisionOptions: [{
+        action: { type: String, default: '' },
+        reasoning: { type: String, default: '' }
+    }],
     constraints: {
-        emergency: { type: Boolean, default: false },
-        resourceLimitations: { type: String, default: '' },
-        financialConstraints: { type: String, default: '' },
+        emergencyCondition: { type: Boolean, default: false },
+        financialLimitation: { type: Boolean, default: false },
+        limitedResources: { type: Boolean, default: false },
+        patientPreference: { type: Boolean, default: false },
+        timeConstraint: { type: Boolean, default: false },
+        investigationDelay: { type: Boolean, default: false },
         other: { type: String, default: '' }
     },
     rawNotes: { type: String, default: '' },

@@ -6,7 +6,7 @@ import { generateRationale } from '../services/aiService';
 
 export const createDecision = async (req: Request, res: Response) => {
     try {
-        const { patient, contextSnapshot, optionsConsidered, constraints, rawNotes } = req.body;
+        const { patient, contextSnapshot, decisionOptions, constraints, rawNotes } = req.body;
         
         if (req.user!.role === 'DOCTOR') {
             const patientDoc = await Patient.findById(patient);
@@ -22,18 +22,34 @@ export const createDecision = async (req: Request, res: Response) => {
             patient,
             doctor: req.user!._id,
             contextSnapshot,
-            optionsConsidered,
+            decisionOptions,
             constraints,
             rawNotes: appendedNotes,
         });
 
+        // Automatically generate rationale during creation using all provided fields
+        try {
+            const rationale = await generateRationale({
+                symptoms: contextSnapshot.symptoms,
+                decisionOptions,
+                constraints,
+                rawNotes: appendedNotes
+            });
+            decision.aiGeneratedRationale = rationale || '';
+            await decision.save();
+        } catch (aiError) {
+            console.error('Initial AI Generation Error:', aiError);
+            // We still return the decision even if AI fails initially
+        }
+
         await AuditLog.create({
             user: req.user!._id,
-            action: `Created decision for patient ${patient}`,
+            action: `Created decision and generated rationale for patient ${patient}`,
         });
 
         res.status(201).json(decision);
     } catch (error) {
+        console.error('Error creating decision:', error);
         res.status(500).json({ message: 'Error creating decision', error });
     }
 };
@@ -49,7 +65,12 @@ export const generateDecisionRationale = async (req: Request, res: Response) => 
             return res.status(403).json({ message: 'Decision is immutable' });
         }
 
-        const rationale = await generateRationale(decision.rawNotes);
+        const rationale = await generateRationale({
+            symptoms: decision.contextSnapshot.symptoms,
+            decisionOptions: decision.decisionOptions,
+            constraints: decision.constraints,
+            rawNotes: decision.rawNotes
+        });
         decision.aiGeneratedRationale = rationale || '';
         await decision.save();
 
