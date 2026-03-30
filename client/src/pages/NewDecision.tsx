@@ -5,6 +5,16 @@ import { X, Plus, Save, ChevronLeft, Info, AlertTriangle, Wand2 } from 'lucide-r
 import PageTransition from '../components/PageTransition';
 import { motion, AnimatePresence } from 'framer-motion';
 
+interface DecisionConstraints {
+    emergencyCondition: boolean;
+    financialLimitation: boolean;
+    limitedResources: boolean;
+    patientPreference: boolean;
+    timeConstraint: boolean;
+    investigationDelay: boolean;
+    other: string;
+}
+
 const NewDecision: React.FC = () => {
     const { id } = useParams<{ id: string }>(); // Patient ID
     const navigate = useNavigate();
@@ -13,7 +23,7 @@ const NewDecision: React.FC = () => {
     
     const [decisionOptions, setDecisionOptions] = useState<{ action: string; reasoning: string }[]>([]);
     
-    const [constraints, setConstraints] = useState({
+    const [constraints, setConstraints] = useState<DecisionConstraints>({
         emergencyCondition: false,
         financialLimitation: false,
         limitedResources: false,
@@ -167,17 +177,17 @@ const NewDecision: React.FC = () => {
                             
                             <div className="grid grid-cols-2 md:grid-cols-3 gap-4 p-6 bg-white/[0.02] rounded-2xl border border-white/5">
                                 {[
-                                    { id: 'emergencyCondition', label: 'Emergency' },
-                                    { id: 'financialLimitation', label: 'Financial' },
-                                    { id: 'limitedResources', label: 'Resources' },
-                                    { id: 'patientPreference', label: 'Preference' },
-                                    { id: 'timeConstraint', label: 'Time' },
-                                    { id: 'investigationDelay', label: 'Delay' },
+                                    { id: 'emergencyCondition' as const, label: 'Emergency' },
+                                    { id: 'financialLimitation' as const, label: 'Financial' },
+                                    { id: 'limitedResources' as const, label: 'Resources' },
+                                    { id: 'patientPreference' as const, label: 'Preference' },
+                                    { id: 'timeConstraint' as const, label: 'Time' },
+                                    { id: 'investigationDelay' as const, label: 'Delay' },
                                 ].map(constraint => (
                                     <label 
                                         key={constraint.id} 
                                         className={`flex items-center p-3 rounded-xl border transition-all cursor-pointer select-none ${
-                                            (constraints as any)[constraint.id] 
+                                            constraints[constraint.id] 
                                                 ? 'bg-primary/20 border-primary/50 text-primary-light' 
                                                 : 'bg-black/20 border-white/5 text-textSecondary hover:border-white/10'
                                         }`}
@@ -185,8 +195,8 @@ const NewDecision: React.FC = () => {
                                         <input
                                             type="checkbox"
                                             className="hidden"
-                                            checked={(constraints as any)[constraint.id]}
-                                            onChange={e => handleConstraintChange(constraint.id as any, e.target.checked)}
+                                            checked={constraints[constraint.id]}
+                                            onChange={e => handleConstraintChange(constraint.id, e.target.checked)}
                                         />
                                         <span className="text-sm font-medium">{constraint.label}</span>
                                     </label>

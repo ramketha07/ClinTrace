@@ -10,7 +10,7 @@ export const createDecision = async (req: Request, res: Response) => {
         
         if (req.user!.role === 'DOCTOR') {
             const patientDoc = await Patient.findById(patient);
-            if (!patientDoc || (patientDoc.assignedDoctor as any).toString() !== req.user!._id.toString()) {
+            if (!patientDoc || patientDoc.assignedDoctor.toString() !== req.user!._id.toString()) {
                 return res.status(403).json({ message: 'Not authorized to create decision for this patient' });
             }
         }
@@ -120,7 +120,7 @@ export const getDecisionsByPatient = async (req: Request, res: Response) => {
     try {
         if (req.user!.role === 'DOCTOR') {
             const patientDoc = await Patient.findById(req.params.patientId);
-            if (!patientDoc || (patientDoc.assignedDoctor as any).toString() !== req.user!._id.toString()) {
+            if (!patientDoc || patientDoc.assignedDoctor.toString() !== req.user!._id.toString()) {
                 return res.status(403).json({ message: 'Not authorized to view decisions for this patient' });
             }
         }
@@ -143,7 +143,7 @@ export const getDecisionById = async (req: Request, res: Response) => {
         
         if (req.user!.role === 'DOCTOR') {
             const patientDoc = await Patient.findById(decision.patient);
-            if (!patientDoc || (patientDoc.assignedDoctor as any).toString() !== req.user!._id.toString()) {
+            if (!patientDoc || patientDoc.assignedDoctor.toString() !== req.user!._id.toString()) {
                 return res.status(403).json({ message: 'Not authorized to view this decision' });
             }
         }
